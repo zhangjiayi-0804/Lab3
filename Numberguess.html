@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="Exercise4" content="lab3-exercise4">
+  <title>Number Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0000ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #555;
+    }
+
+    #previousGuesses {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Number Guessing Game</h1>
+  <p>Please guess the number between 1 and 100, you have 10 chances.</p>
+  <input type="number" id="guessInput">
+  <button onclick="checkGuess()">Submit</button>
+  <p id="result"></p>
+  <p id="previousGuesses"></p>
+  <button onclick="restartGame()">Restart</button>
+
+  <script>
+    let targetNumber;
+    let guessCount = 0;
+    let gameOver = false;
+
+    function generateRandomNumber() {
+      return Math.floor(Math.random() * 100) + 1;
+    }
+
+    function checkGuess() {
+      if (gameOver) return;
+      const guess = parseInt(document.getElementById('guessInput').value);
+      if (isNaN(guess) || guess < 1 || guess > 100) {
+        document.getElementById('result').textContent = 'Please enter a valid number (between 1 and 100).';
+        return;
+      }
+      guessCount++;
+      if (guess == targetNumber) {
+        document.getElementById('result').textContent = 'Congratulation!You are right!';
+        gameOver = true;
+      } else {
+        let hint = guess < targetNumber? 'Too low.Try a higher number.' : 'Too high.Try a lower number.';
+        document.getElementById('result').textContent = hint;
+      }
+      const previousGuessesText = document.getElementById('previousGuesses').textContent;
+      document.getElementById('previousGuesses').textContent = `${previousGuessesText}${guess},`;
+      if (guessCount == 10) {
+        document.getElementById('result').textContent = 'Game over. Sorry you do not guess right. The correct answer is ' + targetNumber + '.';;
+        gameOver = true;
+      }
+    }
+
+    function restartGame() {
+      targetNumber = generateRandomNumber();
+      guessCount = 0;
+      gameOver = false;
+      document.getElementById('result').textContent = '';
+      document.getElementById('previousGuesses').textContent = '';
+      document.getElementById('guessInput').value = '';
+    }
+
+    targetNumber = generateRandomNumber();
+  </script>
+</body>
+
+</html>
